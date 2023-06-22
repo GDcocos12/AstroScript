@@ -15,12 +15,10 @@ Dudolin PL interpreter written in C++
 
 # SAMPLE PROGRAM
 
-`
-DCLR x int 0;<br />
-INP [x];<br />
-IF x == 5 { PRINT "yep"; };<br />
-END;<br />
-`
+`DCLR x int 0;`<br />
+`INP [x];`<br />
+`IF x == 5 { PRINT "yep"; };`<br />
+`END;`<br />
 
 # How to write IF constructions
 
@@ -28,9 +26,9 @@ END;<br />
 
 For example:<br />
 `
-IF 1 == 2 { PRINT "yes"; };<br />
-IF x == y { PRINT "yes"; };<br />
-IF x == 2 { PRINT "yes"; };<br />
+IF 1 == 2 { PRINT "yes"; };
+IF x == y { PRINT "yes"; };
+IF x == 2 { PRINT "yes"; };
 `
 
 Condition Marks:<br />
