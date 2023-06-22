@@ -25,9 +25,9 @@ Dudolin PL interpreter written in C++
 `IF condition {commands;};`<br />
 
 For example:<br />
-`IF 1 == 2 { PRINT "yes"; };<br />`
-`IF x == y { PRINT "yes"; };<br />`
-`IF x == 2 { PRINT "yes"; };<br />`
+`IF 1 == 2 { PRINT "yes"; };`<br />
+`IF x == y { PRINT "yes"; };`<br />
+`IF x == 2 { PRINT "yes"; };`<br />
 
 Condition Marks:<br />
 `==` - equal<br />
