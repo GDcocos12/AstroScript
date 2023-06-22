@@ -1,0 +1,4 @@
+DCLR x int 10;
+INP [x];
+PRINT x;
+END;
