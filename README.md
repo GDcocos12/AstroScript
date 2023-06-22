@@ -11,6 +11,7 @@ Dudolin PL interpreter written in C++
 `ORD [result_variable] 'char'` - write char code to a variable<br />
 `POW [result_variable] variable1/value1 variable2/value2` - write variable1/value1 to the degree of variable2/value2 in the result_variable<br />
 `IF condition {commands}` - IF expression<br />
+`EXEC {filename}` - execute program<br />
 `END` - finish program<br />
 
 # SAMPLE PROGRAM
