@@ -6,19 +6,39 @@
 #include <sstream>
 
 std::map<std::string, double> variables;
+int currline = 0;
+
+void shutd() {
+    system("pause");
+    exit(0);
+}
 
 void handle_dclr(std::string variable_name, std::string data_type, std::string value) {
+    currline++;
     double val;
     if (data_type == "int") {
-        val = std::stoi(value);
+        try {
+            val = std::stod(value);
+        }
+        catch (const std::invalid_argument& ia) {
+            std::cout << "ERROR at line " << currline << ": " << ia.what() << std::endl;
+            shutd();
+        }
     }
     else if (data_type == "float") {
-        val = std::stod(value);
+        try {
+            val = std::stod(value);
+        }
+        catch (const std::invalid_argument& ia) {
+            std::cout << "ERROR at line " << currline << ": " << ia.what() << std::endl;
+            shutd();
+        }
     }
     variables[variable_name] = val;
 }
 
 void handle_opr(std::string result_variable, std::string arg1, std::string action, std::string arg2) {
+    currline++;
     double val1, val2;
     if (variables.count(arg1)) {
         val1 = variables[arg1];
@@ -34,28 +54,60 @@ void handle_opr(std::string result_variable, std::string arg1, std::string actio
     }
     double result;
     if (action == "+") {
-        result = val1 + val2;
+        try {
+            result = val1 + val2;
+        }
+        catch (const std::invalid_argument& ia) {
+            std::cout << "ERROR at line " << currline << ": " << ia.what() << std::endl;
+            shutd();
+        }
     }
     else if (action == "-") {
-        result = val1 - val2;
+        try {
+            result = val1 - val2;
+        }
+        catch (const std::invalid_argument& ia) {
+            std::cout << "ERROR at line " << currline << ": " << ia.what() << std::endl;
+            shutd();
+        }
     }
     else if (action == "*") {
-        result = val1 * val2;
+        try {
+            result = val1 * val2;
+        }
+        catch (const std::invalid_argument& ia) {
+            std::cout << "ERROR at line " << currline << ": " << ia.what() << std::endl;
+            shutd();
+        }
     }
     else if (action == "/") {
-        result = val1 / val2;
+        try {
+            result = val1 / val2;
+        }
+        catch (const std::invalid_argument& ia) {
+            std::cout << "ERROR at line " << currline << ": " << ia.what() << std::endl;
+            shutd();
+        }
     }
     else if (action == "**") {
-        result = pow(val1, val2);
+        try {
+            result = pow(val1, val2);
+        }
+        catch (const std::invalid_argument& ia) {
+            std::cout << "ERROR at line " << currline << ": " << ia.what() << std::endl;
+            shutd();
+        }
     }
     else {
-        std::cout << "Invalid action" << std::endl;
+        std::cout << "ERROR at line " << currline << ": " << "Invalid action" << std::endl;
+        shutd();
         return;
     }
     variables[result_variable.substr(1, result_variable.size() - 2)] = result;
 }
 
 void handle_print(std::string value) {
+    currline++;
     if (value[0] == '"' && value[value.size() - 1] == '"') {
         std::cout << value.substr(1, value.size() - 2) << std::endl;
     }
@@ -68,6 +120,7 @@ void handle_print(std::string value) {
 }
 
 void handle_rnd(std::string variable_name, std::string min_value, std::string max_value) {
+    currline++;
     double min_val, max_val;
     if (variables.count(min_value)) {
         min_val = variables[min_value];
@@ -89,28 +142,61 @@ void handle_rnd(std::string variable_name, std::string min_value, std::string ma
 }
 
 void handle_copy(std::string variable1, std::string variable2) {
+    currline++;
     if (variables.count(variable2)) {
-        double value = variables[variable2];
-        variables[variable1] = value;
+        try {
+            double value = variables[variable2];
+            variables[variable1] = value;
+        }
+        catch (const std::invalid_argument& ia) {
+            std::cout << "ERROR at line " << currline << ": " << ia.what() << std::endl;
+            shutd();
+        }
     }
     else {
-        std::cout << "Variable not found" << std::endl;
+        std::cout << "ERROR at line " << currline << ": " << "Variable not found" << std::endl;
+        shutd();
     }
 }
 
 void handle_if(std::vector<std::string> tokens) {
+    currline++;
     double arg1, arg2;
     if (variables.count(tokens[1])) {
-        arg1 = variables[tokens[1]];
+        try {
+            arg1 = variables[tokens[1]];
+        }
+        catch (const std::invalid_argument& ia) {
+            std::cout << "ERROR at line " << currline << ": " << ia.what() << std::endl;
+            shutd();
+        }
     }
     else {
-        arg1 = std::stod(tokens[1]);
+        try {
+            arg1 = std::stod(tokens[1]);
+        }
+        catch (const std::invalid_argument& ia) {
+            std::cout << "ERROR at line " << currline << ": " << ia.what() << std::endl;
+            shutd();
+        }
     }
     if (variables.count(tokens[3])) {
-        arg2 = variables[tokens[3]];
+        try {
+            arg2 = variables[tokens[3]];
+        }
+        catch (const std::invalid_argument& ia) {
+            std::cout << "ERROR at line " << currline << ": " << ia.what() << std::endl;
+            shutd();
+        }
     }
     else {
-        arg2 = std::stod(tokens[3]);
+        try {
+            arg2 = std::stod(tokens[3]);
+        }
+        catch (const std::invalid_argument& ia) {
+            std::cout << "ERROR at line " << currline << ": " << ia.what() << std::endl;
+            shutd();
+        }
     }
     bool condition;
     if (tokens[2] == ">") {
@@ -132,7 +218,8 @@ void handle_if(std::vector<std::string> tokens) {
         condition = arg1 != arg2;
     }
     else {
-        std::cout << "Invalid condition" << std::endl;
+        std::cout << "ERROR at line " << currline << ": " << "Invalid condition" << std::endl;
+        shutd();
         return;
     }
     if (condition) {
@@ -181,112 +268,142 @@ void handle_if(std::vector<std::string> tokens) {
 }
 
 void handle_ord(std::vector<std::string> tokens) {
-    std::string variable_name = tokens[1].substr(1, tokens[1].size() - 2);
-    char c = tokens[2][1];
-    int ascii_code = static_cast<int>(c);
-    variables[variable_name] = ascii_code;
+    currline++;
+    try {
+        std::string variable_name = tokens[1].substr(1, tokens[1].size() - 2);
+        char c = tokens[2][1];
+        int ascii_code = static_cast<int>(c);
+        variables[variable_name] = ascii_code;
+    }
+    catch (const std::invalid_argument& ia) {
+        std::cout << "ERROR at line " << currline << ": " << ia.what() << std::endl;
+        shutd();
+    }
 }
 
 void handle_pow(std::string result_variable, std::string arg1, std::string arg2) {
-    double val1, val2;
-    if (variables.count(arg1)) {
-        val1 = variables[arg1];
+    currline++;
+    try {
+        double val1, val2;
+        if (variables.count(arg1)) {
+            val1 = variables[arg1];
+        }
+        else {
+            val1 = std::stod(arg1);
+        }
+        if (variables.count(arg2)) {
+            val2 = variables[arg2];
+        }
+        else {
+            val2 = std::stod(arg2);
+        }
+        double result = pow(val1, val2);
+        variables[result_variable.substr(1, result_variable.size() - 2)] = result;
     }
-    else {
-        val1 = std::stod(arg1);
+    catch (const std::invalid_argument& ia) {
+        std::cout << "ERROR at line " << currline << ": " << ia.what() << std::endl;
+        shutd();
     }
-    if (variables.count(arg2)) {
-        val2 = variables[arg2];
-    }
-    else {
-        val2 = std::stod(arg2);
-    }
-    double result = pow(val1, val2);
-    variables[result_variable.substr(1, result_variable.size() - 2)] = result;
 }
 
 void handle_inp(std::string result_variable) {
-    std::string user_input;
-    std::cout << "Enter value: ";
-    std::cin >> user_input;
-    variables[result_variable.substr(1, result_variable.size() - 2)] = std::stod(user_input);
+    currline++;
+    try {
+        std::string user_input;
+        std::cout << "Enter value: ";
+        std::cin >> user_input;
+        variables[result_variable.substr(1, result_variable.size() - 2)] = std::stod(user_input);
+    }
+    catch (const std::invalid_argument& ia) {
+        std::cout << "ERROR at line " << currline << ": " << ia.what() << std::endl;
+        shutd();
+    }
 }
 
 void execute_file(std::string filename) {
-    std::ifstream file(filename);
-    if (file.is_open()) {
-        std::string command;
-        bool in_string = false;
-        while (std::getline(file, command, ';')) {
-            std::vector<std::string> tokens;
-            std::istringstream iss(command);
-            std::string token;
-            while (iss >> token) {
-                if (in_string) {
-                    tokens.back() += " " + token.substr(0, token.size() - 1);
-                    if (token.back() == '"') {
-                        in_string = false;
+    currline++;
+    try {
+        std::ifstream file(filename);
+        if (file.is_open()) {
+            std::string command;
+            bool in_string = false;
+            while (std::getline(file, command, ';')) {
+                std::vector<std::string> tokens;
+                std::istringstream iss(command);
+                std::string token;
+                while (iss >> token) {
+                    if (in_string) {
+                        tokens.back() += " " + token.substr(0, token.size() - 1);
+                        if (token.back() == '"') {
+                            in_string = false;
+                        }
+                    }
+                    else if (token.front() == '"') {
+                        tokens.push_back(token.substr(1));
+                        if (token.back() != '"') {
+                            in_string = true;
+                        }
+                    }
+                    else {
+                        tokens.push_back(token);
                     }
                 }
-                else if (token.front() == '"') {
-                    tokens.push_back(token.substr(1));
-                    if (token.back() != '"') {
-                        in_string = true;
+                if (tokens[0] == "DCLR") {
+                    handle_dclr(tokens[1], tokens[2], tokens[3]);
+                }
+                else if (tokens[0] == "OPR") {
+                    handle_opr(tokens[1], tokens[2], tokens[3], tokens[4]);
+                }
+                else if (tokens[0] == "PRINT") {
+                    handle_print(tokens[1]);
+                }
+                else if (tokens[0] == "RND") {
+                    handle_rnd(tokens[1], tokens[2], tokens[3]);
+                }
+                else if (tokens[0] == "IF") {
+                    handle_if(tokens);
+                }
+                else if (tokens[0] == "COPY") {
+                    handle_copy(tokens[1], tokens[2]);
+                }
+                else if (tokens[0] == "ORD") {
+                    handle_ord(tokens);
+                }
+                else if (tokens[0] == "POW") {
+                    handle_pow(tokens[1], tokens[2], tokens[3]);
+                }
+                else if (tokens[0] == "INP") {
+                    handle_inp(tokens[1]);
+                }
+                else if (tokens[0] == "EXEC") {
+                    if (tokens[1][0] == '{' && tokens[1].back() == '}') {
+                        std::string filename = tokens[1].substr(1, tokens[1].length() - 2);
+                        execute_file(filename);
+                    }
+                    else {
+                        std::cout << "ERROR at line " << currline << ": " << "Invalid file name format" << std::endl;
+                        shutd();
                     }
                 }
-                else {
-                    tokens.push_back(token);
+                else if (tokens[0] == "END") {
+                    break;
                 }
             }
-            if (tokens[0] == "DCLR") {
-                handle_dclr(tokens[1], tokens[2], tokens[3]);
-            }
-            else if (tokens[0] == "OPR") {
-                handle_opr(tokens[1], tokens[2], tokens[3], tokens[4]);
-            }
-            else if (tokens[0] == "PRINT") {
-                handle_print(tokens[1]);
-            }
-            else if (tokens[0] == "RND") {
-                handle_rnd(tokens[1], tokens[2], tokens[3]);
-            }
-            else if (tokens[0] == "IF") {
-                handle_if(tokens);
-            }
-            else if (tokens[0] == "COPY") {
-                handle_copy(tokens[1], tokens[2]);
-            }
-            else if (tokens[0] == "ORD") {
-                handle_ord(tokens);
-            }
-            else if (tokens[0] == "POW") {
-                handle_pow(tokens[1], tokens[2], tokens[3]);
-            }
-            else if (tokens[0] == "INP") {
-                handle_inp(tokens[1]);
-            }
-            else if (tokens[0] == "EXEC") {
-                if (tokens[1][0] == '{' && tokens[1].back() == '}') {
-                    std::string filename = tokens[1].substr(1, tokens[1].length() - 2);
-                    execute_file(filename);
-                }
-                else {
-                    std::cout << "Invalid file name format" << std::endl;
-                }
-            }
-            else if (tokens[0] == "END") {
-                break;
-            }
+            file.close();
         }
-        file.close();
+        else {
+            std::cout << "ERROR at line " << currline << ": " << "Unable to open file" << std::endl;
+            shutd();
+        }
     }
-    else {
-        std::cout << "Unable to open file" << std::endl;
+    catch (const std::invalid_argument& ia) {
+        std::cout << "ERROR at line " << currline << ": " << ia.what() << std::endl;
+        shutd();
     }
 }
 
 int main() {
-    std::cout << "Welcome to DUDOLIN INTERPRETER v1.1" << std::endl;
+    std::cout << "Welcome to ASTROSCRIPT INTERPRETER v1.2" << std::endl;
     std::string filename;
     std::cout << "Enter the file name: ";
     std::cin >> filename;
@@ -348,7 +465,8 @@ int main() {
                     execute_file(filename);
                 }
                 else {
-                    std::cout << "Invalid file name format" << std::endl;
+                    std::cout << "ERROR at line " << currline << ": " << "Invalid file name format" << std::endl;
+                    shutd();
                 }
             }
             else if (tokens[0] == "END") {
@@ -358,7 +476,8 @@ int main() {
         file.close();
     }
     else {
-        std::cout << "Unable to open file" << std::endl;
+        std::cout << "ERROR at line " << currline << ": " << "Unable to open file" << std::endl;
+        shutd();
     }
 
     system("pause");
