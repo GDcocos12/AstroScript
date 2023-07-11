@@ -1,7 +1,7 @@
-# Dudolin
-Dudolin PL interpreter written in C++
+# AstroScript
+AstroScript interpreter written in C++
 
-# DUDOLIN instructions:
+# AstroScript instructions:
 `DCLR variable int/float value` - declare a variable<br />
 `OPR [result_variable] variable/value action variable/value` - expression<br />
 `INP [result_variable]` - input value to a variable<br />
